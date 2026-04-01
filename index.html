@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCAC: A Benchmark Towards Robust Semantic Correspondence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --panel: rgba(255,255,255,0.82);
+      --text: #111827;
+      --muted: #5b6475;
+      --line: rgba(17,24,39,0.08);
+      --shadow: 0 20px 60px rgba(42, 59, 104, 0.12);
+      --accent: #5b7cff;
+      --accent-2: #8b5cf6;
+      --pill: #eef2ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(91,124,255,0.16), transparent 32%),
+        radial-gradient(circle at top right, rgba(139,92,246,0.14), transparent 30%),
+        linear-gradient(180deg, #fbfcff 0%, #f5f7fb 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 72px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 56px 48px 44px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      background: rgba(91,124,255,0.10);
+      top: -70px;
+      right: -40px;
+    }
+
+    .hero::after {
+      width: 180px;
+      height: 180px;
+      background: rgba(139,92,246,0.10);
+      left: -40px;
+      bottom: -60px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--pill);
+      color: #4054b2;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(91,124,255,0.12);
+    }
+
+    h1 {
+      margin: 18px 0 18px;
+      font-size: clamp(2.2rem, 5vw, 3.55rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      max-width: 900px;
+    }
+
+    .authors {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 28px 0 8px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid transparent;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.98rem;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 16px 32px rgba(91,124,255,0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.88);
+      color: var(--text);
+      border-color: rgba(17,24,39,0.10);
+      box-shadow: 0 10px 24px rgba(17,24,39,0.06);
+    }
+
+    .meta {
+      margin-top: 16px;
+      color: #6b7280;
+      font-size: 0.93rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(17,24,39,0.06);
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.98rem;
+    }
+
+    .highlights {
+      display: grid;
+      gap: 14px;
+    }
+
+    .item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(248,250,255,0.95), rgba(243,246,255,0.92));
+      border: 1px solid rgba(91,124,255,0.10);
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+
+    .item span {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.94rem;
+    }
+
+    footer {
+      text-align: center;
+      color: #7a8191;
+      font-size: 0.9rem;
+      padding-top: 20px;
+    }
+
+    code.inline {
+      background: rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 8px;
+      padding: 3px 7px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 860px) {
+      .hero { padding: 36px 22px 28px; border-radius: 24px; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 22px; border-radius: 20px; }
+      .wrap { width: min(100% - 20px, 1080px); padding-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Replace these two links with your real URLs before publishing -->
+  <script>
+    const DATA_URL = "#";
+    const SUPP_PDF_URL = "#";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("data-btn").href = DATA_URL;
+      document.getElementById("supp-btn").href = SUPP_PDF_URL;
+    });
+  </script>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="badge">Project Page</div>
+      <h1>SCAC: A Benchmark Towards Robust Semantic Correspondence</h1>
+      <p class="authors">Anonymous Author(s)</p>
+
+      <div class="links">
+        <a id="data-btn" class="btn btn-primary" href="#">Data</a>
+        <a id="supp-btn" class="btn btn-secondary" href="#">Supplementary PDF for ACMMM</a>
+      </div>
+
+      <div class="meta">
+        Update the two links at the top of the source: <code class="inline">DATA_URL</code> and <code class="inline">SUPP_PDF_URL</code>.
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Abstract</h2>
+        <p>
+          Semantic correspondence aims to identify semantically meaningful relationships between different images and is a fundamental challenge in computer vision. In this work, we establish a novel benchmark for evaluating semantic correspondence in adverse conditions. The benchmark dataset comprises 14 distinct challenging scenarios that reflect commonly encountered imaging issues, including geometric distortion, image blurring, digital artifacts, and environmental occlusion. Through extensive evaluations, we provide several key insights into the robustness of semantic correspondence approaches, highlighting the need for more robust and task-specific designs.
+        </p>
+      </article>
+
+      <aside class="card">
+        <h2>Highlights</h2>
+        <div class="highlights">
+          <div class="item">
+            <strong>14 adverse conditions</strong>
+            <span>Covering geometry, blur &amp; noise, digital artifacts, and environmental changes.</span>
+          </div>
+          <div class="item">
+            <strong>Robustness-focused benchmark</strong>
+            <span>Designed to measure how semantic correspondence methods behave in real challenging scenarios.</span>
+          </div>
+          <div class="item">
+            <strong>Clear project landing page</strong>
+            <span>A lightweight homepage styled similarly to modern benchmark project pages, with only two required jump buttons.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      Built as a clean single-file project page for your paper.
+    </footer>
+  </main>
+</body>
+</html>
